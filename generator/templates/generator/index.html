@@ -1,0 +1,219 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Professional Color Palette Generator</title>
+<link rel="stylesheet" href="{% static 'generator/css/style.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --header-bg: #1a1a1a;
+        --text-light: #ffffff;
+        --text-dark: #333333;
+        --shadow: 0 4px 12px rgba(0,0,0,0.1);
+        --border-radius: 8px;
+        --transition: all 0.2s ease;
+    }
+    
+    body {
+        margin: 0;
+        font-family:sans-serif;
+        background-color: #f8f9fa;
+        color: var(--text-dark);
+        line-height: 1.6;
+    }
+    
+    header {
+        background: var(--header-bg);
+        color: var(--text-light);
+        padding: 20px 15px;
+        text-align: center;
+        box-shadow: var(--shadow);
+    }
+    
+    header h1 {
+        margin: 0 0 15px;
+        font-size: 1.8rem;
+        font-weight: 600;
+    }
+    
+    .controls {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .control-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .control-group label {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: rgba(255,255,255,0.9);
+    }
+    
+    .controls input[type="color"] {
+        width: 60px;
+        height: 36px;
+        padding: 2px;
+        border: 2px solid rgba(255,255,255,0.2);
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    
+    .controls input[type="color"]:hover {
+        border-color: rgba(255,255,255,0.4);
+    }
+    
+    .controls select {
+        padding: 8px 12px;
+        border: 2px solid rgba(255, 255, 255, 0.635);
+        border-radius: var(--border-radius);
+        background-color:rgb(240, 231, 231);
+        color:rgb(40, 35, 35);
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    
+    .controls select:hover {
+        border-color: rgba(255,255,255,0.4);
+    }
+    
+    .controls button {
+        padding: 8px 20px;
+        background-color: #4a6fa5;
+        color: white;
+        border: none;
+        border-radius: var(--border-radius);
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+        align-self: flex-end;
+    }
+    
+    .controls button:hover {
+        background-color: #3a5a8f;
+        transform: translateY(-1px);
+    }
+    
+    .wrap {
+        display: flex;
+        height: calc(100vh - 150px);
+    }
+    
+    .palette-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 20px 10px;
+        position: relative;
+        transition: var(--transition);
+    }
+    
+    .palette-col:hover {
+        flex-grow: 1.2;
+        z-index: 1;
+    }
+    
+    .hex-label {
+        text-align: center;
+        width: 100%;
+        font-weight: 600;
+        font-size: 1rem;
+        padding: 8px;
+        background-color: rgba(0,0,0,0.3);
+        border-radius: 4px;
+        backdrop-filter: blur(4px);
+    }
+    
+    .color-name {
+        margin-top: 10px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        opacity: 0.9;
+    }
+    
+    @media (max-width: 768px) {
+        .wrap {
+            flex-direction: column;
+            height: auto;
+        }
+        
+        .palette-col {
+            min-height: 120px;
+            justify-content: center;
+        }
+        
+        .controls {
+            gap: 12px;
+            
+        }
+    }
+</style>
+</head>
+
+<body>
+<header>
+  <h1>Color Palette Generator</h1>
+  <div class="controls">
+    <div class="control-group">
+      <label for="colorPicker">Base Color</label>
+      <input id="colorPicker" type="color" value="#4a6fa5" title="Pick a base color">
+    </div>
+
+    <div class="control-group">
+      <label for="scheme">Color Scheme</label>
+      <select id="scheme">
+        <option value="analogous">Analogous</option>
+        <option value="complementary">Complementary</option>
+        <option value="triadic" selected>Triadic</option>
+        <option value="split">Split-Complementary</option>
+        <option value="monochrome">Monochromatic</option>
+        <option value="tetradic">Tetradic</option>
+      </select>
+    </div>
+
+    <button id="generateBtn">Generate Palette</button>
+  </div>
+</header>
+
+<div class="wrap" id="palette">
+  <!-- Example static colors until JS fills them -->
+  <div class="palette-col" style="background-color:#1B4079;">
+      <span class="hex-label">#1B4079</span>
+      <span class="color-name">Deep Navy</span>
+  </div>
+  <div class="palette-col" style="background-color:#4D7C8A;">
+      <span class="hex-label">#4D7C8A</span>
+      <span class="color-name">Teal Blue</span>
+  </div>
+  <div class="palette-col" style="background-color:#7F9C96;">
+      <span class="hex-label">#7F9C96</span>
+      <span class="color-name">Muted Teal</span>
+  </div>
+  <div class="palette-col" style="background-color:#8FAD88;">
+      <span class="hex-label">#8FAD88</span>
+      <span class="color-name">Sage Green</span>
+  </div>
+  <div class="palette-col" style="background-color:#CBDF90;">
+      <span class="hex-label">#CBDF90</span>
+      <span class="color-name">Pale Lime</span>
+  </div>
+</div>
+
+<script src="{% static 'generator/js/palette.js' %}"></script>
+</body>
+</html>
